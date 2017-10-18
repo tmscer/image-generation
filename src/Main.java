@@ -1,6 +1,4 @@
 import javax.imageio.ImageIO;
-import javax.imageio.stream.FileImageOutputStream;
-import javax.imageio.stream.ImageOutputStream;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -74,12 +72,12 @@ public class Main {
                 return images;
             },
             (width, height) -> {
-                BufferedImage[] images = new BufferedImage[10];
+                BufferedImage[] images = new BufferedImage[height / 2 + 1];
                 for (int c = 0; c < images.length; c++) {
                     images[c] = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
                     for (int i = 0; i < width; i++) {
                         for (int j = 0; j < height; j++) {
-                            if ((i + j == width / 2 || i - j == width / 2) && j < height / 2 - c) {
+                            if ((i + j == width / 2 || i + j == width / 2 + 1 || i - j == width / 2 || i - j == width / 2 - 1) && j < height / 2 - 1.5 * c) {
                                 images[c].setRGB(i, j, MONOKAI[1]);
                             } else
                                 images[c].setRGB(i, j, MONOKAI[0]);
@@ -107,7 +105,7 @@ public class Main {
             }
     };
 
-    static ImageGenerator theGen = (width, height) -> {
+    private static ImageGenerator theGen = (width, height) -> {
         BufferedImage[] smallImages = generators[3].apply(60, 60);
         BufferedImage[] connectedImages = new BufferedImage[smallImages.length];
         for (int counter = 0; counter < connectedImages.length; counter++) {
@@ -116,15 +114,17 @@ public class Main {
                 for (int j = 0; j < 1080 / 60; j++) {
                     for (int x = 0; x < 60; x++) {
                         for (int y = 0; y < 60; y++) {
-                            System.out.println((i * 60 + x) + ", " + (j * 60 + y) + ": " + smallImages[counter].getRGB(x, y));
+                            Color color = new Color(smallImages[counter].getRGB(x, y));
+                            int alpha = 255;//255 - ((counter + 1) * 256 / 32);
                             connectedImages[counter].setRGB(i * 60 + x, j * 60 + y,
-                                    smallImages[counter].getRGB(x, y));
+                                    new Color(color.getRed(), color.getGreen(), color.getBlue(),
+                                            alpha < 0 ? 0 : alpha).getRGB());
                         }
                     }
                 }
             }
         }
-        return smallImages;
+        return connectedImages;
     };
 
     /*
@@ -138,34 +138,19 @@ public class Main {
      */
 
     public static void main(String... args) throws IOException, InterruptedException {
-        BufferedImage[] images1 = generators[3].apply(1920, 1080);
-        BufferedImage[] images2 = generators[4].apply(1920, 1080);
-
         BufferedImage[] gens = theGen.apply(1920, 1080);
+
+        GifMaker.makeGif(new File("./imgs/GIF.gif"), gens, 800 / gens.length, true);
 
         long time = System.currentTimeMillis();
         for (int i = 0; i < gens.length; i++) {
-            File imageFile = new File("./imgs/g" + i + "f.png");
+            File imageFile = new File("./imgs/" + i + ".png");
             try {
                 ImageIO.write(gens[i], "PNG", imageFile);
             } catch (IOException e) {
-                System.out.println("COULD NOT WRITE FILE " + imageFile);
                 e.printStackTrace();
             }
         }
-
-        /*ImageOutputStream output = new FileImageOutputStream(new File("giff.gif"));
-        GifSequenceWriter sequenceWriter = new GifSequenceWriter(output, images1[0].getType(), 10, true);
-        for (BufferedImage image : images1) {
-            sequenceWriter.writeToSequence(image);
-        }
-
-        for (BufferedImage image : images2) {
-            sequenceWriter.writeToSequence(image);
-        }
-
-        sequenceWriter.close();
-        output.close();*/
     }
 
 }
