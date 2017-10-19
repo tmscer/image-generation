@@ -105,7 +105,7 @@ public class Main {
             (width, height) -> {
                 int range1 = 100;
                 int range2 = 0;
-                BufferedImage[] images = new BufferedImage[50];
+                BufferedImage[] images = new BufferedImage[70];
                 Random rand = new Random(0);
                 int pixSize = 10;
                 for (int c = 0; c < images.length; c++) {
@@ -115,7 +115,7 @@ public class Main {
                             int color = MONOKAI[0];
                             int dist = (int) (Math.sqrt(Math.pow(Math.abs(x - width / 2), 2) +
                                     Math.pow(Math.abs(y - height / 2), 2)));
-                            if(dist > range2 && dist < range1)
+                            if (dist > range2 && dist < range1)
                                 if (rand.nextInt(2) == 1) {
                                     int r = 249 + -2 * c;
                                     int b = 114 + -3 * c;
@@ -129,7 +129,7 @@ public class Main {
                         }
                     }
                     range1 += 6;
-                    range2 += 8;
+                    range2 += 7;
                 }
                 return images;
             }
@@ -157,6 +157,18 @@ public class Main {
         return connectedImages;
     };
 
+    public static void main(String... args) throws IOException, InterruptedException {
+        BufferedImage[] gens = generators[5].apply(1920 / 2 + 100, 1920 / 2 + 100);
+
+        BufferedImage[] reversed = new BufferedImage[gens.length * 2 - 1];
+        System.arraycopy(gens, 0, reversed, 0, gens.length);
+        for (int i = 0; i < gens.length - 1; i++) {
+            reversed[gens.length + i] = gens[gens.length - i - 1];
+        }
+
+        GifMaker.makeGif(new File("./imgs/GIF.gif"), reversed, 30, true);
+    }
+
     /*
     1368 = 2 * 683
     768 = 2^8 * 3
@@ -166,36 +178,5 @@ public class Main {
     1080 = 2^3 * 3^3 * 5
     common factors = {2^3, 3, 5}
      */
-
-    public static void main(String... args) throws IOException, InterruptedException {
-        BufferedImage[] gens = generators[5].apply(1920/2, 1920/2);
-
-        BufferedImage[] reversed = new BufferedImage[gens.length * 2];
-        System.arraycopy(gens, 0, reversed, 0, gens.length);
-        for (int i = 0; i < gens.length; i++) {
-            reversed[gens.length + i] = gens[gens.length - i - 1];
-        }
-
-        GifMaker.makeGif(new File("./imgs/GIF.gif"), reversed, 50, true);
-
-
-
-        long time = System.currentTimeMillis();
-        /*File imageFile = new File("./imgs/" + i + ".png");
-        for (int i = 0; i < gens.length; i++) {
-            try {
-                ImageIO.write(gens[i], "PNG", imageFile);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        for (int i = gens.length - 1; i > -1; i--) {
-            try {
-                ImageIO.write(gens[i], "PNG", imageFile);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }*/
-    }
 
 }
