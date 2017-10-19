@@ -1,4 +1,3 @@
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -102,6 +101,37 @@ public class Main {
                     }
                 }
                 return images;
+            },
+            (width, height) -> {
+                int range1 = 100;
+                int range2 = 0;
+                BufferedImage[] images = new BufferedImage[50];
+                Random rand = new Random(0);
+                int pixSize = 10;
+                for (int c = 0; c < images.length; c++) {
+                    images[c] = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+                    for (int x = 0; x < width; x += pixSize) {
+                        for (int y = 0; y < height; y += pixSize) {
+                            int color = MONOKAI[0];
+                            int dist = (int) (Math.sqrt(Math.pow(Math.abs(x - width / 2), 2) +
+                                    Math.pow(Math.abs(y - height / 2), 2)));
+                            if(dist > range2 && dist < range1)
+                                if (rand.nextInt(2) == 1) {
+                                    int r = 249 + -2 * c;
+                                    int b = 114 + -3 * c;
+                                    color = new Color(r < 0 ? 0 : r, 38, b < 0 ? 0 : b).getRGB();
+                                }
+                            for (int i = 0; i < pixSize; i++) {
+                                for (int j = 0; j < pixSize; j++) {
+                                    images[c].setRGB(x + i, y + j, color);
+                                }
+                            }
+                        }
+                    }
+                    range1 += 6;
+                    range2 += 8;
+                }
+                return images;
             }
     };
 
@@ -138,19 +168,34 @@ public class Main {
      */
 
     public static void main(String... args) throws IOException, InterruptedException {
-        BufferedImage[] gens = theGen.apply(1920, 1080);
+        BufferedImage[] gens = generators[5].apply(1920/2, 1920/2);
 
-        GifMaker.makeGif(new File("./imgs/GIF.gif"), gens, 800 / gens.length, true);
+        BufferedImage[] reversed = new BufferedImage[gens.length * 2];
+        System.arraycopy(gens, 0, reversed, 0, gens.length);
+        for (int i = 0; i < gens.length; i++) {
+            reversed[gens.length + i] = gens[gens.length - i - 1];
+        }
+
+        GifMaker.makeGif(new File("./imgs/GIF.gif"), reversed, 50, true);
+
+
 
         long time = System.currentTimeMillis();
+        /*File imageFile = new File("./imgs/" + i + ".png");
         for (int i = 0; i < gens.length; i++) {
-            File imageFile = new File("./imgs/" + i + ".png");
             try {
                 ImageIO.write(gens[i], "PNG", imageFile);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+        for (int i = gens.length - 1; i > -1; i--) {
+            try {
+                ImageIO.write(gens[i], "PNG", imageFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }*/
     }
 
 }
