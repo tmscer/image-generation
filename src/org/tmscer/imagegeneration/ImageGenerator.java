@@ -1,3 +1,5 @@
+package org.tmscer.imagegeneration;
+
 import java.awt.image.BufferedImage;
 import java.util.function.BiFunction;
 

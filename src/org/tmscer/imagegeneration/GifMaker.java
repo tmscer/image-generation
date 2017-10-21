@@ -1,3 +1,7 @@
+package org.tmscer.imagegeneration;
+
+import org.elliotkroo.gif.GifSequenceWriter;
+
 import javax.imageio.stream.FileImageOutputStream;
 import javax.imageio.stream.ImageOutputStream;
 import java.awt.image.BufferedImage;

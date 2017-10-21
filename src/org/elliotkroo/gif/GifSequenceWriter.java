@@ -1,5 +1,5 @@
-// 
-//  GifSequenceWriter.java
+package org.elliotkroo.gif;//
+//  org.elliotkroo.gif.GifSequenceWriter.java
 //  
 //  Created by Elliot Kroo on 2009-04-25.
 //
@@ -22,7 +22,7 @@ public class GifSequenceWriter {
     protected IIOMetadata imageMetaData;
 
     /**
-     * Creates a new GifSequenceWriter
+     * Creates a new org.elliotkroo.gif.GifSequenceWriter
      *
      * @param outputStream the ImageOutputStream to be written to
      * @param imageType one of the imageTypes specified in BufferedImage
@@ -103,7 +103,7 @@ public class GifSequenceWriter {
     }
 
     /**
-     * Close this GifSequenceWriter object. This does not close the underlying
+     * Close this org.elliotkroo.gif.GifSequenceWriter object. This does not close the underlying
      * stream, just finishes off the GIF.
      */
     public void close() throws IOException {
@@ -151,7 +151,7 @@ public class GifSequenceWriter {
     }
 
     /**
-     public GifSequenceWriter(
+     public org.elliotkroo.gif.GifSequenceWriter(
      BufferedOutputStream outputStream,
      int imageType,
      int timeBetweenFramesMS,
@@ -184,7 +184,7 @@ public class GifSequenceWriter {
             output.close();
         } else {
             System.out.println(
-                    "Usage: java GifSequenceWriter [list of gif files] [output file]");
+                    "Usage: java org.elliotkroo.gif.GifSequenceWriter [list of gif files] [output file]");
         }
     }
 }
