@@ -133,4 +133,21 @@ public final class ImageGenerators {
         return connectedImages;
     };
 
+	public static final ImageGenerator DIAGONAL = (width, height) -> {
+		BufferedImage[] images = new BufferedImage[1];
+		images[0] = new BufferedImage(width, height, 1);
+		int mod = 40;
+		int c = new Color(200, 32, 100).getRGB();
+		for (int x = 0; x < width; x++) {
+			for (int y = 0; y < height; y++) {
+				if ((x + y) % mod == 0 || (x - y) % mod == 0) {
+					images[0].setRGB(x, y, c);
+				} else {
+					images[0].setRGB(x, y, MONOKAI[0]);
+				}
+			}
+		}
+		return images;
+	};
+
 }

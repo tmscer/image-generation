@@ -13,7 +13,7 @@ import static org.tmscer.imagegeneration.ImageGenerators.*;
 public class Main {
 
     public static void main(String... args) throws IOException, InterruptedException {
-        BufferedImage[] gens = ENLARGING_CIRCLE.apply(100, 100);
+        /*BufferedImage[] gens = ENLARGING_CIRCLE.apply(100, 100);
 
         BufferedImage[] reversed = new BufferedImage[gens.length * 2 - 1];
         System.arraycopy(gens, 0, reversed, 0, gens.length);
@@ -21,7 +21,10 @@ public class Main {
             reversed[gens.length + i] = gens[gens.length - i - 1];
         }
 
-        GifMaker.makeGif(new File("./imgs/GIF.gif"), reversed, 30, true);
+        GifMaker.makeGif(new File("./imgs/GIF.gif"), reversed, 30, true);*/
+		BufferedImage img = DIAGONAL.apply(1366, 768)[0];
+		File imgFile = new File("/home/tmscer/Pictures/wm/suspend.png");
+		ImageIO.write(img, "PNG", imgFile);
     }
 
     /*
