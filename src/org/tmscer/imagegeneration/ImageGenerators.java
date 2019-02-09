@@ -5,10 +5,12 @@ import java.awt.image.BufferedImage;
 import java.util.Random;
 
 import static org.tmscer.imagegeneration.Colors.MONOKAI;
+import static org.tmscer.imagegeneration.Colors.TRANSPARENT;
 
 public final class ImageGenerators {
 
-    private ImageGenerators() {}
+    private ImageGenerators() {
+    }
 
     public static final ImageGenerator RANDOM_DIAGONAL = (width, height) -> {
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
@@ -149,5 +151,36 @@ public final class ImageGenerators {
 		}
 		return images;
 	};
+
+    public static final ImageGenerator CENTER_OPENING = (width, height) -> {
+        BufferedImage[] images = new BufferedImage[120];
+        for (int c = 0; c < images.length; c++) {
+            int i = images.length - 1 - c;
+            images[i] = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    int xDiffA = Math.abs(x - width / 2);
+                    int xDiffB = Math.abs(x - width / 2 + 1);
+                    int yDiffA = Math.abs(y - height / 2);
+                    int yDiffB = Math.abs(y - height / 2 + 1);
+                    int limit = width / 2 - c;
+                    if (xDiffA + yDiffA <= limit || xDiffA + yDiffB <= limit || xDiffB + yDiffA <= limit || xDiffB + yDiffB <= limit)
+                        images[i].setRGB(x, y, Color.WHITE.getRGB());
+                    else
+                        images[i].setRGB(x, y, MONOKAI[0]);
+                }
+            }
+        }
+        return images;
+    };
+
+    public static final ImageGenerator OPENING_COMPOSITION = (width, height) -> {
+        BufferedImage[] images = new BufferedImage[60];
+        width = 1920;
+        height = 1080;
+        BufferedImage[] center = CENTER_OPENING.apply(120, 120);
+
+        return center;
+    };
 
 }

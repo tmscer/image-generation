@@ -14,4 +14,6 @@ public final class Colors {
             new Color(253, 151, 31).getRGB()
     };
 
+    public static final int TRANSPARENT = new Color(0, 0, 0, 0).getRGB();
+
 }
